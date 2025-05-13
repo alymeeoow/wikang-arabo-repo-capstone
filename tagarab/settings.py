@@ -149,7 +149,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-GOOGLE_TRANSLATE_API_KEY = "AIzaSyCqYu06wfsDxjVOuDyaEo5-SGdbdcS0eOE"
+GOOGLE_TRANSLATE_API_KEY = "KEY"
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
