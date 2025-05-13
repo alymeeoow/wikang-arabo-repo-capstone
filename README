@@ -29,6 +29,10 @@ pip install django
 # Install required packages from requirements.txt
 pip install -r requirements.txt
 
+# Put the API KEY in THE GOOGLE API KEY in the settings.py this key:
+
+AIzaSyCqYu06wfsDxjVOuDyaEo5-SGdbdcS0eOE
+
 # Create migration files for the database
 python manage.py makemigrations
 
