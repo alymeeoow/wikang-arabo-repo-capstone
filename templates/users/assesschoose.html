@@ -1,0 +1,256 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment</title>
+  <link rel="stylesheet" href="{% static 'css/users/assesschoose.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+
+
+</head>
+<body>
+
+  <style>
+    .header {
+display: flex;
+justify-content: space-between; /* Space between logo and navbar */
+align-items: center;
+padding: 10px 20px;
+background-color: #ececec;
+border-bottom: 1px solid black;
+position: fixed;
+width: 100%;
+top: 0;
+z-index: 1000;
+}
+
+/* Logo */
+.logo {
+max-height: 40px;
+margin-right: auto; /* Push the logo to the left */
+}
+
+/* Navbar */
+.navbar {
+display: flex;
+justify-content: center; /* Center-align the navbar links */
+align-items: center;
+gap: 15px;
+flex-grow: 1; /* Allow navbar to take up remaining space */
+}
+
+.navbar a,
+.navbar .logout-btn {
+text-decoration: none;
+color: black;
+font-weight: bold;
+padding: 5px 8px;
+font-size: 14px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: none;
+border: none;
+cursor: pointer;
+}
+
+
+.navbar a:hover,
+.navbar .logout-btn:hover {
+color: #333;
+}
+
+/* Logout Button */
+.logout-btn {
+margin-left: auto; /* Push the logout button to the far right */
+}
+
+.logout-btn i {
+font-size: 16px;
+margin-left: 5px;
+}
+
+/* History Toggle Button */
+.toggle-history {
+display: none; /* Hide by default */
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+color: black;
+margin-right: 10px;
+}
+
+/* Burger Menu */
+/* Default - Hide Burger Menu */
+.burger-menu {
+display: none;
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+margin-right: 20px;
+color: black;
+}
+
+/* Show Burger Menu on Smaller Screens */
+@media (max-width: 768px) {
+.burger-menu {
+display: block; /* Show on smaller screens */
+}
+
+.navbar {
+display: none; /* Hide the navbar by default on smaller screens */
+}
+
+.navbar.show {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+background-color: #ececec;
+padding: 10px;
+position: absolute;
+top: 60px;
+left: 0;
+width: 100%;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar a,
+.navbar .logout-btn {
+margin-bottom: 5px;
+}
+}
+
+
+@media (max-width: 768px) {
+.toggle-history,
+.burger-menu {
+display: block; 
+}
+}
+
+@media (min-width: 769px) {
+.toggle-history,
+.burger-menu {
+display: none;
+}
+}
+
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+.navbar {
+display: none;
+}
+
+.navbar.show {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+background-color: #ececec;
+padding: 10px;
+position: absolute;
+top: 60px;
+left: 0;
+width: 100%;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar a,
+.navbar .logout-btn {
+margin-bottom: 5px;
+}
+
+.burger-menu {
+display: block; 
+}
+}
+
+</style>
+
+
+
+
+
+
+<div class="header">
+  <img src="{% static 'images/TAlogo.png' %}" class="logo" alt="Logo" />
+
+  <!-- Navbar -->
+  <div class="navbar" id="navbar">
+    <a  href="{% url 'translate' %}">Translate</a>
+    <a href="{% url 'arabic_alphabet' %}">Alphabet</a>
+    <a class="active" href="{% url 'assesschoose' %}">Assessment</a>
+    <a href="{% url 'dictionary' %}">Dictionary</a>
+    <a href="{% url 'profile' %}">Profile</a>
+    <form id="logoutForm" action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="logout-btn">
+        <i class="fas fa-sign-out-alt" title="Logout"></i> 
+      </button>
+    </form>
+  </div>
+
+  <!-- Burger Menu -->
+  <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+</div>
+
+
+  <!-- Burger Menu (visible on smaller screens) -->
+  <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+</div>
+</div>
+
+
+
+
+  
+  <div class="container">
+    <h1 class="heading">Choose what Language of Test you want to take</h1>
+    <div class="book">
+      <div class="option" onclick="showConfirmationModal('Tagalog')">
+        <span class="option-text">Assessment A</span>
+        <p>TAGALOG</p>
+      </div>
+      <div class="option" onclick="showConfirmationModal('Arabic')">
+        <span class="option-text">Assessment B</span>
+         <p>العربية</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <p id="modalText">Are you sure you want to take this assessment?</p>
+      <div class="modal-buttons">
+        <button onclick="confirmAssessment()">Yes</button>
+        <button onclick="closeModal()">No</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/users/assesschoose.js'%}"></script>
+  <script>
+    function confirmAssessment() {
+      if (selectedAssessment === 'Tagalog') {
+        window.location.href = "{% url 'assessment_tagalog'%}"; 
+      } else if (selectedAssessment === 'Arabic') {
+        window.location.href = "{% url 'assessment_arabic'%}"; 
+      }
+    }
+
+
+    function toggleNav() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('show'); 
+}
+    
+  </script>
+</body>

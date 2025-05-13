@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{% static 'css/users/profile.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <style>
+    .header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ECECEC;
+  border-bottom: 1px solid black;
+  position: fixed;
+  top: 0;
+  z-index: 2;
+}
+
+    /* Logo */
+    .logo {
+    max-height: 40px;
+    margin-right: auto; /* Push the logo to the left */
+    }
+    
+    /* Navbar */
+    .navbar {
+    display: flex;
+    justify-content: center; /* Center-align the navbar links */
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1; /* Allow navbar to take up remaining space */
+    }
+    
+    .navbar a,
+    .navbar .logout-btn {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 5px 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    }
+    
+    
+    .navbar a:hover,
+    .navbar .logout-btn:hover {
+    color: #333;
+    }
+    
+    /* Logout Button */
+    .logout-btn {
+    margin-left: auto; /* Push the logout button to the far right */
+    }
+    
+    .logout-btn i {
+    font-size: 16px;
+    margin-left: 5px;
+    }
+    
+    /* History Toggle Button */
+    .toggle-history {
+    display: none; /* Hide by default */
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: black;
+    margin-right: 10px;
+    }
+    
+    /* Burger Menu */
+    /* Default - Hide Burger Menu */
+    .burger-menu {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 20px;
+    color: black;
+    }
+    
+    /* Show Burger Menu on Smaller Screens */
+    @media (max-width: 768px) {
+    .burger-menu {
+    display: block; /* Show on smaller screens */
+    }
+    
+    .navbar {
+    display: none; /* Hide the navbar by default on smaller screens */
+    }
+    
+    .navbar.show {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #ececec;
+    padding: 10px;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .navbar a,
+    .navbar .logout-btn {
+    margin-bottom: 5px;
+    }
+    }
+    
+    
+    @media (max-width: 768px) {
+    .toggle-history,
+    .burger-menu {
+    display: block; 
+    }
+    }
+    
+    @media (min-width: 769px) {
+    .toggle-history,
+    .burger-menu {
+    display: none;
+    }
+    }
+    
+    
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+    .navbar {
+    display: none;
+    }
+    
+    .navbar.show {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #ececec;
+    padding: 10px;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .navbar a,
+    .navbar .logout-btn {
+    margin-bottom: 5px;
+    }
+    
+    .burger-menu {
+    display: block; 
+    }
+    }
+    
+    </style>
+    
+    
+    
+    
+    
+    
+    <div class="header">
+      <img src="{% static 'images/TAlogo.png' %}" class="logo" alt="Logo" />
+    
+      <!-- Navbar -->
+      <div class="navbar" id="navbar">
+        <a  href="{% url 'translate' %}">Translate</a>
+        <a href="{% url 'arabic_alphabet' %}">Alphabet</a>
+        <a  href="{% url 'assesschoose' %}">Assessment</a>
+        <a class="active"  href="{% url 'dictionary' %}">Dictionary</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <form id="logoutForm" action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn">
+            <i class="fas fa-sign-out-alt" title="Logout"></i> 
+          </button>
+        </form>
+      </div>
+    
+      <!-- Burger Menu -->
+      <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+    </div>
+    
+    
+      <!-- Burger Menu (visible on smaller screens) -->
+      <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+    </div>
+    </div>
+    
+    
+    <div class="header">
+      <img src="{% static 'images/TAlogo.png' %}" class="logo" alt="Logo" />
+    
+      <!-- Navbar -->
+      <div class="navbar" id="navbar">
+        <a  href="{% url 'translate' %}">Translate</a>
+        <a href="{% url 'arabic_alphabet' %}">Alphabet</a>
+        <a  href="{% url 'assesschoose' %}">Assessment</a>
+        <a   href="{% url 'dictionary' %}">Dictionary</a>
+        <a class="active"  href="{% url 'profile' %}">Profile</a>
+        <form id="logoutForm" action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn">
+            <i class="fas fa-sign-out-alt" title="Logout"></i> 
+          </button>
+        </form>
+      </div>
+    
+      <!-- Burger Menu -->
+      <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+    </div>
+    
+   
+   
+
+
+    <!-- Profile Form -->
+    <div class="container">
+        <h1>User Profile</h1>
+        <form id="profileForm" action="{% url 'profile' %}" method="post">
+            {% csrf_token %}
+            <div class="profile-section">
+                <h2>Personal Information</h2>
+                <div class="profile-form">
+                    <div class="profile-input">
+                        <label for="firstName">First Name (الإسم الأول):</label>
+                        <input type="text" id="firstName" name="firstName" value="{{ user_profile.first_name }}" readonly required>
+                    </div>
+                    <div class="profile-input">
+                        <label for="middleName">Middle Name (الإسم الأوسط):</label>
+                        <input type="text" id="middleName" name="middleName" value="{{ user_profile.middle_name }}" readonly>
+                    </div>
+                    <div class="profile-input">
+                        <label for="lastName">Last Name (الإسم العائلة):</label>
+                        <input type="text" id="lastName" name="lastName" value="{{ user_profile.last_name }}" readonly required>
+                    </div>
+                    <div class="profile-input">
+                        <label for="homeAddress">Home Address (عنوان):</label>
+                        <input type="text" id="homeAddress" name="homeAddress" value="{{ user_profile.home_address }}" readonly>
+                    </div>
+                    <div class="profile-input">
+                        <label for="birthdate">Birthdate (تاريخ الميلاد):</label>
+                        <input type="text" id="birthdateDisplay" name="birthdateDisplay" value="{{ user_profile.birth_month }}-{{ user_profile.birth_day }}-{{ user_profile.birth_year }}" readonly>
+                        <input type="date" id="birthdate" name="birthdate" style="display:none;">
+                    </div>
+                    <div class="profile-input">
+                        <label for="gender">Gender (جنس):</label>
+                        <select id="gender" name="gender" disabled>
+                            <option value="male" {% if user_profile.gender == 'male' %}selected{% endif %}>Male</option>
+                            <option value="female" {% if user_profile.gender == 'female' %}selected{% endif %}>Female</option>
+                            <option value="other" {% if user_profile.gender == 'other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <button id="editBtn" class="edit-button" type="button" onclick="enableEditing()">Edit</button>
+                <button id="saveBtn"  class="edit-button" type="submit" style="display: none;">Save Profile</button>
+        
+            </div>
+        </form>
+        <div class="profile-section">
+            <h2>Assessment Results</h2>
+            {% if assessment_results %}
+                <ul class="assessment-list">
+                    {% for result in assessment_results %}
+                        <li>
+                            <strong>Test:</strong> {{ result.test_type }}<br>
+                            <strong>Score:</strong> {{ result.score }}/{{ result.total_questions }} ({{ result.percentage|floatformat:2 }}%)<br>
+                            <span>Date Taken: {{ result.date_taken|date:"F j, Y, g:i A" }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No assessments taken yet.</p>
+            {% endif %}
+        </div>
+        
+
+    {% if messages %}
+    <div class="modal" id="myModal" style="display: block;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Profile Status</h2>
+            </div>
+            <div class="modal-body">
+                {% for message in messages %}
+                    <p class="{{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="{% static 'js/users/profile.js' %}"></script>
+    <script>
+          function toggleNav() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('show'); 
+}
+    </script>
+</body>
+</html>

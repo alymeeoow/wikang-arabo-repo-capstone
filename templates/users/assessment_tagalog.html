@@ -1,0 +1,332 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment</title>
+  <link rel="stylesheet" href="{% static 'css/users/assessment_tagalog.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+
+  <style>
+    .header {
+display: flex;
+justify-content: space-between; 
+align-items: center;
+padding: 10px 20px;
+background-color: #ececec;
+border-bottom: 1px solid black;
+position: fixed;
+width: 100%;
+top: 0;
+
+}
+
+
+.logo {
+max-height: 40px;
+margin-right: auto;
+}
+
+
+.navbar {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 15px;
+flex-grow: 1; 
+}
+
+.navbar a,
+.navbar .logout-btn {
+text-decoration: none;
+color: black;
+font-weight: bold;
+padding: 5px 8px;
+font-size: 14px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: none;
+border: none;
+cursor: pointer;
+}
+
+
+.navbar a:hover,
+.navbar .logout-btn:hover {
+color: #333;
+}
+
+
+.logout-btn {
+margin-left: auto
+}
+
+.logout-btn i {
+font-size: 16px;
+margin-left: 5px;
+}
+
+
+.toggle-history {
+display: none; 
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+color: black;
+margin-right: 10px;
+}
+
+
+.burger-menu {
+display: none;
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+margin-right: 20px;
+color: black;
+}
+
+
+@media (max-width: 768px) {
+.burger-menu {
+display: block;
+}
+
+.navbar {
+display: none; 
+}
+
+.navbar.show {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+background-color: #ececec;
+padding: 10px;
+position: absolute;
+top: 60px;
+left: 0;
+width: 100%;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar a,
+.navbar .logout-btn {
+margin-bottom: 5px;
+}
+}
+
+
+@media (max-width: 768px) {
+.toggle-history,
+.burger-menu {
+display: block; 
+}
+}
+
+@media (min-width: 769px) {
+.toggle-history,
+.burger-menu {
+display: none;
+}
+}
+
+
+
+@media (max-width: 768px) {
+.navbar {
+display: none;
+}
+
+.navbar.show {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+background-color: #ececec;
+padding: 10px;
+position: absolute;
+top: 60px;
+left: 0;
+width: 100%;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar a,
+.navbar .logout-btn {
+margin-bottom: 5px;
+}
+
+.burger-menu {
+display: block; 
+}
+}
+
+#timeoutMessage {
+    font-size: 16px;
+    margin: 0;
+    color: red;
+    font-weight: 400;
+    text-align: center;
+}
+
+#retryButton {
+    background-color: #ffc000;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px auto; 
+    display: block; 
+}
+
+#retryButton:hover {
+    background-color: #ffb000;
+}
+
+
+#retryContainer {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+</style>
+
+
+
+
+
+
+<div class="header">
+  <img src="{% static 'images/TAlogo.png' %}" class="logo" alt="Logo" />
+
+  <!-- Navbar -->
+  <div class="navbar" id="navbar">
+    <a href="{% url 'translate' %}" data-url="{% url 'translate' %}" onclick="return confirmNavigation(event)">Translate</a>
+    <a href="{% url 'arabic_alphabet' %}" data-url="{% url 'arabic_alphabet' %}"  onclick="return confirmNavigation(event)">Alphabet</a>
+    <a href="{% url 'assesschoose' %}" data-url="{% url 'assesschoose' %}" onclick="return confirmNavigation(event)">Assessment</a>
+    <a href="{% url 'dictionary' %}" data-url="{% url 'dictionary' %}" onclick="return confirmNavigation(event)">Dictionary</a>
+    <a href="{% url 'profile' %}" data-url="{% url 'profile' %}" onclick="return confirmNavigation(event)">Profile</a>
+
+
+
+    <form id="logoutForm" action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="logout-btn">
+        <i style="margin-right: 50px; cursor: pointer;" class="fas fa-sign-out-alt" title="Logout" onclick="confirmLogout(event)"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Burger Menu -->
+  <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+</div>
+
+
+  <!-- Burger Menu (visible on smaller screens) -->
+  <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+</div>
+</div>
+
+
+
+
+<div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Confirm Action</h2>
+           
+        </div>
+        <div class="modal-body">
+            <p id="modalMessage">Are you sure you want to proceed?</p>
+            <div class="modal-buttons">
+            <button id="confirmButton">Yes</button>
+            <button id="cancelButton" onclick="closeConfirmationModal()">No</button>
+          </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 200px;" class="container">
+  <form id="assessmentForm" method="POST" action="{% url 'submit_assessment' %}">
+    {% csrf_token %}
+    <input type="hidden" name="total_questions" value="{{ questions|length }}">
+    <div id="question-container">
+      {% for question in questions %}
+      <div class="question" id="question_{{ forloop.counter }}" style="display: none;">
+        <h3>{{ question.question_text }}</h3>
+        <ul class="options">
+          <li>
+            <input type="radio" name="answers_{{ question.id }}" value="{{ question.option_1 }}">
+            {{ question.option_1 }}
+          </li>
+          <li>
+            <input type="radio" name="answers_{{ question.id }}" value="{{ question.option_2 }}">
+            {{ question.option_2 }}
+          </li>
+          <li>
+            <input type="radio" name="answers_{{ question.id }}" value="{{ question.option_3 }}">
+            {{ question.option_3 }}
+          </li>
+          <li>
+            <input type="radio" name="answers_{{ question.id }}" value="{{ question.option_4 }}">
+            {{ question.option_4 }}
+          </li>
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="buttons">
+      <i class="fas fa-arrow-left arrow" title="Back" onclick="goToPreviousQuestion()"></i>
+      <button type="button" onclick="startSpeechRecognition()" class="voice-button">Voice Answer</button>
+      <i class="fas fa-arrow-right arrow" title="Next" onclick="goToNextQuestion()"></i>
+  </div>
+  
+  
+  
+    <button type="submit"style="display: none;" id="submitButton">Submit Test</button>
+  </form>
+</div>
+
+<div id="voiceModal" class="modal">
+  <div class="modal-content">
+      <div class="modal-header">
+          <h2 id="modalTitle">Speak Now</h2>
+          <span class="close" style="margin-top: -40px; margin-right: -15px" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+          <p id="modalMessage">Please speak into the microphone...</p>
+          <p id="timeoutMessage" style="display:block; color: red;">We didn't catch that. Please try again.</p>
+          <button id="retryButton" style="display:block;" onclick="retrySpeechRecognition()">Try Again</button>
+      </div>
+  </div>
+</div>
+
+
+
+
+<script src="{% static 'js/users/assessment_tagalog.js'%}"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=3H4F782F"></script>
+
+<script>
+    function toggleNav() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('show'); 
+}
+
+</script>
+
+
+
+</body>
+</html>

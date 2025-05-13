@@ -1,0 +1,318 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dictionary</title>
+  <link rel="stylesheet" href="{% static 'css/users/dictionary.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/TAlogo.png' %}">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+</head>
+<body>
+
+  <style>
+    .header {
+display: flex;
+justify-content: space-between; 
+align-items: center;
+padding: 10px 20px;
+background-color: #ececec;
+border-bottom: 1px solid black;
+position: fixed;
+width: 100%;
+top: 0;
+z-index: 1000;
+}
+
+
+.logo {
+max-height: 40px;
+margin-right: auto; 
+}
+
+
+.navbar {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 15px;
+flex-grow: 1; 
+}
+
+.navbar a,
+.navbar .logout-btn {
+text-decoration: none;
+color: black;
+font-weight: bold;
+padding: 5px 8px;
+font-size: 14px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: none;
+border: none;
+cursor: pointer;
+}
+
+
+.navbar a:hover,
+.navbar .logout-btn:hover {
+color: #333;
+}
+
+
+.logout-btn {
+margin-left: auto; 
+}
+
+.logout-btn i {
+font-size: 16px;
+margin-left: 5px;
+}
+
+
+.toggle-history {
+display: none;
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+color: black;
+margin-right: 10px;
+}
+
+
+.burger-menu {
+display: none;
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+margin-right: 20px;
+color: black;
+}
+
+@media (max-width: 768px) {
+.burger-menu {
+display: block;
+}
+
+.navbar {
+display: none; 
+}
+
+.navbar.show {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+background-color: #ececec;
+padding: 10px;
+position: absolute;
+top: 60px;
+left: 0;
+width: 100%;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar a,
+.navbar .logout-btn {
+margin-bottom: 5px;
+}
+}
+
+
+@media (max-width: 768px) {
+.toggle-history,
+.burger-menu {
+display: block; 
+}
+}
+
+@media (min-width: 769px) {
+.toggle-history,
+.burger-menu {
+display: none;
+}
+}
+
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+.navbar {
+display: none;
+}
+
+.navbar.show {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+background-color: #ececec;
+padding: 10px;
+position: absolute;
+top: 60px;
+left: 0;
+width: 100%;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar a,
+.navbar .logout-btn {
+margin-bottom: 5px;
+}
+
+.burger-menu {
+display: block; 
+}
+}
+.switch-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#languageSwitch {
+  width: 50px;
+  height: 25px;
+  position: relative;
+  appearance: none;
+  background-color: #ccc;
+  border-radius: 25px;
+  transition: background-color 0.3s ease;
+}
+
+#languageSwitch:checked {
+  background-color: #4caf50;
+}
+
+#languageSwitch:before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background-color: white;
+  transition: transform 0.3s ease;
+}
+
+#languageSwitch:checked:before {
+  transform: translateX(25px);
+}
+
+</style>
+
+
+
+
+
+
+<div class="header">
+  <img src="{% static 'images/TAlogo.png' %}" class="logo" alt="Logo" />
+
+  <!-- Navbar -->
+  <div class="navbar" id="navbar">
+    <a  href="{% url 'translate' %}">Translate</a>
+    <a href="{% url 'arabic_alphabet' %}">Alphabet</a>
+    <a  href="{% url 'assesschoose' %}">Assessment</a>
+    <a class="active"  href="{% url 'dictionary' %}">Dictionary</a>
+    <a href="{% url 'profile' %}">Profile</a>
+    <form id="logoutForm" action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="logout-btn">
+        <i class="fas fa-sign-out-alt" title="Logout"></i> 
+      </button>
+    </form>
+  </div>
+
+  <!-- Burger Menu -->
+  <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+</div>
+
+
+  <!-- Burger Menu (visible on smaller screens) -->
+  <button class="burger-menu" id="burgerMenu" onclick="toggleNav()">☰</button>
+</div>
+</div>
+
+
+
+
+<div class="container">
+  <div class="word-of-the-day" id="wordOfDayContainer">
+    <h2>WORD OF THE DAY :</h2>
+    <p id="wordOfDay"></p>
+  </div>
+  <div class="switch-container" style="display: flex; align-items: center; margin-bottom: 10px;">
+    <label for="languageSwitch" style="margin-right: 10px;">Switch Type</label>
+    <input type="checkbox" id="languageSwitch" onclick="toggleLanguage()" />
+    <span id="languageLabel">Descriptive Dictionary</span>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search Tagalog Word here..." />
+    <button onclick="searchDictionary()">Search</button>
+    <button id="wordsButton" style="display: none;"> Words</button>
+  </div>
+
+  
+  
+  
+  <div id="tagalogWordsContainer" style="margin-top: 20px;"></div>
+  
+  
+  <div class="results" id="resultsContainer"></div>
+  
+  <div class="arabic-equivalent" id="arabicEquivalentContainer">
+    <h3 id="equivalentLabel"></h3>
+    <p id="arabicTerm" dir="rtl"></p>
+    <p id="arabicDefinition" dir="rtl"></p>
+    
+  </div>
+  <div id="wordsList"></div>
+  
+  </div>
+</div>
+
+
+
+<div id="voiceModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modalTitle">Speak Now</h2>
+      <span class="close" style="margin-top: -40px; margin-right: -15px" onclick="closeModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <p id="modalMessage">Please speak into the microphone...</p>
+      <p id="timeoutMessage" style="display:none; color: red;">Voice search timed out. Please try again.</p>
+      <button id="retryButton" style="display:none;" onclick="retryVoiceSearch()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const WORD_DICTIONARY_URL = "{% static 'js/json/words_dictionary.json' %}";
+
+
+  function toggleNav() {
+  const navbar = document.getElementById('navbar');
+  navbar.classList.toggle('show'); 
+}
+</script>
+
+
+<script src="{% static 'js/users/dictionary.js'%}"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=3H4F782F"></script>
+
+
+
+
+
+</body>
+</html>
