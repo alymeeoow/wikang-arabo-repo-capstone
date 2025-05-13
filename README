@@ -1,0 +1,42 @@
+# Django Project Setup & Run Guide
+
+This guide will help you install Django, set up the **Wikang Arabo** project, and run it on your local machine.
+
+---
+
+## 📦 Prerequisites
+
+- **Python 3.8+** → [Download here](https://www.python.org/downloads/)
+- **pip** → Comes with Python, used to install packages
+
+---
+
+## ⚙️ Setup Instructions
+
+1. Open your terminal or command prompt.
+2. Run the following commands **step-by-step**:
+
+```bash
+# Clone the project repository
+git clone https://github.com/alymeeoow/wikang-arabo-repo-capstone.git
+
+# Navigate to the project folder
+cd wikang-arabo-repo-capstone
+
+# Install Django (if not already installed)
+pip install django
+
+# Install required packages from requirements.txt
+pip install -r requirements.txt
+
+# Create migration files for the database
+python manage.py makemigrations
+
+# Apply the migrations to set up the database
+python manage.py migrate
+
+# Create an admin (superuser) account
+python manage.py createsuperuser
+
+# Start the development server
+python manage.py runserver
